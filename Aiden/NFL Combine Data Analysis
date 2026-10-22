@@ -1,0 +1,121 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv("/Users/aiden/Downloads/NFL.csv")
+
+## Trend 1, 40-Yard Dash by Position
+
+plt.figure(figsize=(12,6))
+
+sns.boxplot(
+    data=df,
+    x="Position",
+    y="Sprint_40yd"
+)
+
+plt.title("40-Yard Dash Time by Position")
+plt.xlabel("Position")
+plt.ylabel("40-Yard Dash Time (Seconds)")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
+
+
+## Trend 2, Weight vs. 40-Yard Dash
+
+plt.figure(figsize=(10, 6))
+
+sns.regplot(
+    data=df,
+    x="Weight",
+    y="Sprint_40yd"
+)
+
+plt.title("Player Weight vs. 40-Yard Dash Time")
+plt.xlabel("Weight (lbs)")
+plt.ylabel("40-Yard Dash Time (Seconds)")
+
+plt.tight_layout()
+plt.show()
+
+# Calculate correlation
+correlation = df["Weight"].corr(df["Sprint_40yd"])
+
+print("Weight and 40-Yard Correlation:", correlation)
+
+
+##Trend 3, Average 40 Time by Year
+
+yearly_40 = (
+    df.groupby("Year")["Sprint_40yd"]
+    .mean()
+    .reset_index()
+)
+
+plt.figure(figsize=(10, 6))
+
+sns.lineplot(
+    data=yearly_40,
+    x="Year",
+    y="Sprint_40yd",
+    marker="o"
+)
+
+plt.title("Average 40-Yard Dash Time by Year")
+plt.xlabel("Year")
+plt.ylabel("Average 40-Yard Dash Time (Seconds)")
+
+plt.tight_layout()
+plt.show()
+
+
+## Trend 4, Vertical Jump by Position
+
+vertical_position = (
+    df.groupby("Position")["Vertical_Jump"]
+    .mean()
+    .sort_values(ascending=False)
+    .reset_index()
+)
+
+plt.figure(figsize=(12, 6))
+
+sns.barplot(
+    data=vertical_position,
+    x="Position",
+    y="Vertical_Jump"
+)
+
+plt.title("Average Vertical Jump by Position")
+plt.xlabel("Position")
+plt.ylabel("Average Vertical Jump (Inches)")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
+
+
+##Trend 5, Drafted vs. Undrafted
+
+drafted_40 = (
+    df.groupby("Drafted")["Sprint_40yd"]
+    .mean()
+    .reset_index()
+)
+
+plt.figure(figsize=(8, 6))
+
+sns.barplot(
+    data=drafted_40,
+    x="Drafted",
+    y="Sprint_40yd"
+)
+
+plt.title("40-Yard Dash: Drafted vs. Undrafted Players")
+plt.xlabel("Drafted")
+plt.ylabel("Average 40-Yard Dash Time (Seconds)")
+
+plt.tight_layout()
+plt.show()
